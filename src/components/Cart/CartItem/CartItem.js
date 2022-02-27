@@ -8,13 +8,15 @@ import './CartItem.css';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
 
+import * as actionTypes from '../../../redux/actions'
+
 function CartItem1({ item, adjustQty, removeFromCart }) {
     const [input, setInput] = useState(item.qty);
 
     const onChangeHandler = (e) => {
       if(e.target.value>0)
       {
-      setInput(e.target.value);
+        setInput(e.target.value);
         adjustQty(item.id, e.target.value);
       } 
       
@@ -58,4 +60,11 @@ function CartItem1({ item, adjustQty, removeFromCart }) {
     )
 }
 
-export default CartItem1;
+const mapDispatchToProps = (dispatch) => {
+  return{
+    removeFromCart : (id) => dispatch({type : actionTypes.REMOVE_FROM_CART, payload : {id : id}}),
+    adjustQty : (id, qty) => dispatch({type : actionTypes.UPDATE_QTY, payload : {id : id, qty : qty}})
+  }
+}
+
+export default connect(null, mapDispatchToProps)(CartItem1);

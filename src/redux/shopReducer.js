@@ -54,7 +54,7 @@ const initialState = {
     switch(action.type){
         case actionTypes.ADD_TO_CART : 
             const item = state.Products.find((product)=>product.id==action.payload.id);
-            console.log(item);
+            //console.log(item);
             const inCart = state.Cart.find((product)=> product.id==action.payload.id ? true:false);
             return{
               ...state, // We are copying everthing as it is but since we want to update Cart therefore "Cart : inCart ? ...."
@@ -66,7 +66,20 @@ const initialState = {
               return {
                 ...state,
                 currentItem : action.payload.item
-              }      
+              }
+          case actionTypes.REMOVE_FROM_CART :
+              return{
+                ...state,
+                Cart : state.Cart.filter((cartProduct) => cartProduct.id != action.payload.id)
+                // Below not valid because humein "removeFromCart" [in Caritem.js] mein props mein sirf "id" mil rha hai
+                // and hum yah pe 2 props ka use kr rhe hain (id, qty) isliye not valid
+                //Cart : state.Cart.map((cartProduct) => cartProduct.id == action.payload.id ? {...cartProduct, qty : qty - 1} : cartProduct)
+              }
+          case actionTypes.UPDATE_QTY :
+            return{
+              ...state,
+              Cart : state.Cart.map((cartProduct) => cartProduct.id == action.payload.id ? {...cartProduct, qty : action.payload.qty} : cartProduct)
+            }           
           default : 
               return state;    
     }
